@@ -119,7 +119,7 @@ const Game = () => {
   const startGame = (playerCount) => {
     // Initialize the players' hands and deck of cards
     const startingDeck = [];
-    const maxElements = 4;
+    const maxElements = 16;
     const repetitions = 3;
     const numUraniumCards = 2;
     const numFlipCards = 4;
