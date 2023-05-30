@@ -3,10 +3,32 @@ import { elements } from "./constants.js";
 
 // Define the Start Screen Component
 const StartScreen = ({ startGame }) => {
+  const [playerCount, setPlayerCount] = useState(2);
+
+  const handleInputChange = (event) => {
+    const { value } = event.target;
+    setPlayerCount(Number(value));
+  };
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    startGame(playerCount);
+  };
+
   return (
     <div>
       <h1>Welcome to Periodic Chaos!</h1>
-      <button onClick={startGame}>Start Game</button>
+      <form onSubmit={handleSubmit}>
+        <label>
+          Player Count:
+          <input
+            type="number"
+            value={playerCount}
+            onChange={handleInputChange}
+          />
+        </label>
+        <button type="submit">Start Game</button>
+      </form>
     </div>
   );
 };
@@ -61,10 +83,7 @@ const Stack = ({ cards }) => (
 // Define the Game component
 const Game = () => {
   const [isGameStarted, setIsGameStarted] = useState(false);
-  const [players, setPlayers] = useState([
-    { name: "Player 1", hand: [], monopolies: [], isWinner: false },
-    { name: "Player 2", hand: [], monopolies: [], isWinner: false },
-  ]);
+  const [players, setPlayers] = useState([]);
   const [stack, setStack] = useState([]);
   const [currentPlayerIndex, setCurrentPlayerIndex] = useState(0);
   const [mode, setMode] = useState("atomicNumber");
@@ -85,7 +104,7 @@ const Game = () => {
   };
 
   // Function to start the game
-  const startGame = () => {
+  const startGame = (playerCount) => {
     // Initialize the players' hands and deck of cards
     // (You'll need to implement this part based on your desired deck composition and distribution logic)
 
@@ -100,19 +119,18 @@ const Game = () => {
       }
     }
 
-    const player1Hand = [];
-    const player2Hand = [];
+    const playerHands = [];
+    for (let player = 0; player < playerCount; player++) {
+      const hand = [];
+      playerHands.push(hand);
+    }
 
     // shuffle and distribute cards
     const shuffledCards = [...startingDeck].sort(() => Math.random() - 0.5);
 
     for (let i = 0; i < shuffledCards.length; i++) {
       const card = shuffledCards[i];
-      if (i % 2 === 0) {
-        player1Hand.push(card);
-      } else {
-        player2Hand.push(card);
-      }
+      playerHands[i % playerCount].push(card);
     }
     const findElementsAppearingThrice = (hand) => {
       const counts = {};
@@ -130,20 +148,14 @@ const Game = () => {
       return appearingThrice;
     };
 
-    setPlayers([
-      {
-        name: "Player 1",
-        hand: player1Hand,
-        monopolies: findElementsAppearingThrice(player1Hand),
+    setPlayers(
+      playerHands.map((playerHand, index) => ({
+        name: `Player ${index + 1}`,
+        hand: playerHand,
+        monopolies: findElementsAppearingThrice(playerHand),
         isWinner: false,
-      },
-      {
-        name: "Player 2",
-        hand: player2Hand,
-        monopolies: findElementsAppearingThrice(player2Hand),
-        isWinner: false,
-      },
-    ]);
+      }))
+    );
 
     setCurrentPlayerIndex(0);
     setStack([]);
@@ -194,8 +206,6 @@ const Game = () => {
       <h3>Stack</h3>
       <Stack cards={stack} />
       <hr />
-
-      <button onClick={startGame}>Restart Game</button>
     </div>
   );
 };
