@@ -1,70 +1,20 @@
-# Getting Started with Create React App
+# Periodic Chaos
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Game Instructions
 
-## Available Scripts
+This is a card game with 54 cards (48 element cards, 4 FLIP cards, and 2 uranium cards). The game is played by dealing an equal size hand to each player and taking turns playing cards until one person has no cards left. That person is the winner and the master of the periodic table.
+Hence, the object of the game is to get rid of all your cards first.
 
-In the project directory, you can run:
+The element cards are ranked in a hierarchy based on their strength number. A higher strength number correlates to a “stronger card.” At the beginning, _the strength number of each element card is the same as its atomic number_.
 
-### `npm start`
+The game progresses as follows: choose a person to go first. That person must place an element card on the table, starting a stack. Then, in a clockwise order around the table, each player may choose to either place a card on top of the stack or forfeit their turn. Each card in the stack must have a higher strength number than the previous card in the stack. If, at any point, all players decide to pass their turn, discard the stack. Then, the person who placed the last card may place any card to start a new stack, and play continues.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+Note: you may also play two of the same card (two-of-a-kind) to start a stack; in this case, all subsequent plays must also be two-of-a-kind cards with higher strength.
+There are two special cards: uranium cards and FLIP cards. Uranium cards are nuclear bombs; they have a strength number of infinity and can beat any other card.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+FLIP cards are unique in that they can be played at any time, even if it is not your turn. Playing a FLIP card does not count as taking a turn. FLIP cards are placed straight into the discard pile, not on the playing stack. A FLIP card allows you to reassign the strength numbers of **all the element cards in the game (other than uranium)** to either **atomic number, electronegativity, or atomic radius**.
 
-### `npm test`
+Finally, there are certain special combinations you may use. If you have a carbon and a nitrogen, you may play both as a cyanide at any time, and thus skip the current player’s turn. This may also be used with two chlorides.
+WHILE you have three-of-a-kind, you have a monopoly on that element. Multiply the strength number of those cards by 1.5.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+Good luck and have fun!
