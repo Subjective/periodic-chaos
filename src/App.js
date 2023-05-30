@@ -199,8 +199,13 @@ const Game = () => {
         selectedMode = window.prompt(
           'Enter "atomicNumber", "atomicRadius", or "electronegativity": '
         );
+        if (selectedMode === null || selectedMode === "") return;
       } while (!validModes.includes(selectedMode));
+
       setMode(selectedMode);
+      currentPlayer.forfeitedTurn = false;
+
+      return;
     } else {
       // Validate that the played card has a higher strength than the previous card on the stack
       const lastCard = stack[stack.length - 1];
@@ -215,9 +220,9 @@ const Game = () => {
       // Add the card to the stack
       setStack([...stack, cardToPlay]);
     }
+    currentPlayer.forfeitedTurn = false;
 
     currentPlayer.hand.splice(cardIndex, 1);
-    currentPlayer.forfeitedTurn = false;
 
     if (currentPlayer.hand.length === 0) {
       currentPlayer.isWinner = true;
