@@ -83,6 +83,7 @@ const Stack = ({ cards }) => (
 // Define the Game component
 const Game = () => {
   const [isGameStarted, setIsGameStarted] = useState(false);
+  const [isGameEnded, setIsGameEnded] = useState(false);
   const [players, setPlayers] = useState([]);
   const [stack, setStack] = useState([]);
   const [currentPlayerIndex, setCurrentPlayerIndex] = useState(0);
@@ -151,6 +152,7 @@ const Game = () => {
     setPlayers(
       playerHands.map((playerHand, index) => ({
         name: `Player ${index + 1}`,
+        forfeitedTurn: false,
         hand: playerHand,
         monopolies: findElementsAppearingThrice(playerHand),
         isWinner: false,
@@ -165,7 +167,6 @@ const Game = () => {
 
   // Function to handle a player's turn
   const playCard = (cardIndex) => {
-    console.log("Click!");
     const currentPlayer = players[currentPlayerIndex];
     const cardToPlay = currentPlayer.hand[cardIndex];
 
@@ -180,11 +181,40 @@ const Game = () => {
 
     // Remove the played card from the player's hand
     currentPlayer.hand.splice(cardIndex, 1);
+    currentPlayer.forfeitedTurn = false;
 
     // Add the card to the stack
     setStack([...stack, cardToPlay]);
 
+    if (currentPlayer.hand.length === 0) {
+      currentPlayer.isWinner = true;
+      setIsGameEnded(true);
+      return;
+    }
+
     // Update the current player
+    setCurrentPlayerIndex((currentPlayerIndex + 1) % players.length);
+
+    console.log("Play card!");
+    console.log(players);
+  };
+
+  const forfeitTurn = () => {
+    console.log("Forfeited turn");
+    console.log(players);
+
+    const currentPlayer = players[currentPlayerIndex];
+    currentPlayer.forfeitedTurn = true;
+
+    let forfeitedTurns = 0;
+    players.forEach((player) => {
+      if (player.forfeitedTurn) forfeitedTurns++;
+    });
+    if (forfeitedTurns === players.length) {
+      setStack([]);
+      players.forEach((player) => (player.forfeitedTurn = false));
+    }
+
     setCurrentPlayerIndex((currentPlayerIndex + 1) % players.length);
   };
 
@@ -192,19 +222,27 @@ const Game = () => {
     <StartScreen startGame={startGame} />
   ) : (
     <div>
-      {players.map(
-        (player, index) =>
-          index === currentPlayerIndex && (
-            <div key={index}>
-              <h3>{player.name}</h3>
-              <Hand cards={player.hand} playCard={playCard} />
-              {player.isWinner && <p>Winner!</p>}
-            </div>
-          )
+      {!isGameEnded ? (
+        players.map(
+          (player, index) =>
+            index === currentPlayerIndex && (
+              <div key={index}>
+                <h3>{player.name}</h3>
+                <Hand cards={player.hand} playCard={playCard} />
+                <button onClick={forfeitTurn}>Forfeit turn</button>
+              </div>
+            )
+        )
+      ) : (
+        <div>
+          <p>Player {currentPlayerIndex + 1} is the Winner!</p>
+          <button onClick={startGame}>Restart</button>
+        </div>
       )}
       <hr />
       <h3>Stack</h3>
       <Stack cards={stack} />
+      <div>Mode: {mode}</div>
       <hr />
     </div>
   );
