@@ -107,7 +107,13 @@ const Game = () => {
     if (element2.name === "Uranium") {
       return -Infinity;
     }
-    return element1[mode] - element2[mode];
+
+    // set multiplier for monopoly cards
+    let multiplier = 1;
+    if (players[currentPlayerIndex].monopolies.includes(element1))
+      multiplier = 1.5;
+
+    return element1[mode] * multiplier - element2[mode];
   };
 
   // Function to start the game
@@ -152,14 +158,14 @@ const Game = () => {
 
     const findElementsAppearingThrice = (hand) => {
       const counts = {};
-      const appearingThrice = [];
+      const appearingThrice = new Set();
 
       for (const element of hand) {
         const { name } = element;
         counts[name] = (counts[name] || 0) + 1;
 
-        if (counts[name] === 3 && !appearingThrice.includes(name)) {
-          appearingThrice.push(name);
+        if (counts[name] === 3) {
+          appearingThrice.add(name);
         }
       }
 
@@ -205,11 +211,12 @@ const Game = () => {
         );
         return;
       }
+      // delete monopoly status if just played
+      currentPlayer.monopolies.delete(cardToPlay.name);
       // Add the card to the stack
       setStack([...stack, cardToPlay]);
     }
 
-    // Remove the played card from the player's hand
     currentPlayer.hand.splice(cardIndex, 1);
     currentPlayer.forfeitedTurn = false;
 
