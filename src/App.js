@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { elements } from "./constants.js";
+import { elements, specialCards } from "./constants.js";
 
 const StartScreen = ({ startGame }) => {
   const [playerCount, setPlayerCount] = useState(2);
@@ -34,13 +34,16 @@ const StartScreen = ({ startGame }) => {
 
 const Card = ({
   onClick,
+  name,
   symbol,
   atomicNumber,
   atomicRadius,
   electronegativity,
 }) => (
   <div onClick={onClick}>
-    <span>{symbol} | </span>
+    <span>
+      {name}: ({symbol}) |{" "}
+    </span>
     <span>Atomic Number: {atomicNumber}; </span>
     <span>Atomic Radius: {atomicRadius} pm; </span>
     <span>Electronegativity: {electronegativity}; </span>
@@ -53,6 +56,7 @@ const Hand = ({ cards, playCard }) => (
       <Card
         key={index}
         onClick={() => playCard(index)}
+        name={card.name}
         symbol={card.symbol}
         atomicNumber={card.atomicNumber}
         atomicRadius={card.atomicRadius}
@@ -67,6 +71,7 @@ const Stack = ({ cards }) => (
     {cards.map((card, index) => (
       <Card
         key={index}
+        name={card.name}
         symbol={card.symbol}
         atomicNumber={card.atomicNumber}
         atomicRadius={card.atomicRadius}
@@ -96,6 +101,12 @@ const Game = () => {
       "diff: ",
       element1[mode] - element2[mode]
     );
+    if (element1.name === "Uranium") {
+      return Infinity;
+    }
+    if (element2.name === "Uranium") {
+      return -Infinity;
+    }
     return element1[mode] - element2[mode];
   };
 
@@ -103,14 +114,26 @@ const Game = () => {
   const startGame = (playerCount) => {
     // Initialize the players' hands and deck of cards
     const startingDeck = [];
-    const maxElements = 16;
+    const maxElements = 4;
     const repetitions = 3;
+    const numUraniumCards = 2;
+    const numFlipCards = 4;
 
+    // normal cards
     for (let i = 0; i < maxElements; i++) {
       const element = elements[i % elements.length];
       for (let j = 0; j < repetitions; j++) {
         startingDeck.push(element);
       }
+    }
+
+    // special cards
+    for (let i = 0; i < numUraniumCards; i++) {
+      startingDeck.push(specialCards.uranium);
+    }
+
+    for (let i = 0; i < numFlipCards; i++) {
+      startingDeck.push(specialCards.flip);
     }
 
     const playerHands = [];
@@ -126,6 +149,7 @@ const Game = () => {
       const card = shuffledCards[i];
       playerHands[i % playerCount].push(card);
     }
+
     const findElementsAppearingThrice = (hand) => {
       const counts = {};
       const appearingThrice = [];
@@ -163,21 +187,31 @@ const Game = () => {
     const currentPlayer = players[currentPlayerIndex];
     const cardToPlay = currentPlayer.hand[cardIndex];
 
-    // Validate that the played card has a higher strength than the previous card on the stack
-    const lastCard = stack[stack.length - 1];
-    if (lastCard && compareStrength(cardToPlay, lastCard) < 0) {
-      alert(
-        "Invalid move! The card must have a higher strength than the previous card."
-      );
-      return;
+    if (cardToPlay.name === "FLIP") {
+      let selectedMode;
+      const validModes = ["atomicNumber", "atomicRadius", "electronegativity"];
+      do {
+        selectedMode = window.prompt(
+          'Enter "atomicNumber", "atomicRadius", or "electronegativity": '
+        );
+      } while (!validModes.includes(selectedMode));
+      setMode(selectedMode);
+    } else {
+      // Validate that the played card has a higher strength than the previous card on the stack
+      const lastCard = stack[stack.length - 1];
+      if (lastCard && compareStrength(cardToPlay, lastCard) < 0) {
+        alert(
+          "Invalid move! The card must have a higher strength than the previous card."
+        );
+        return;
+      }
+      // Add the card to the stack
+      setStack([...stack, cardToPlay]);
     }
 
     // Remove the played card from the player's hand
     currentPlayer.hand.splice(cardIndex, 1);
     currentPlayer.forfeitedTurn = false;
-
-    // Add the card to the stack
-    setStack([...stack, cardToPlay]);
 
     if (currentPlayer.hand.length === 0) {
       currentPlayer.isWinner = true;

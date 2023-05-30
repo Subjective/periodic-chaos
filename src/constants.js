@@ -1,3 +1,22 @@
+export const specialCards = {
+  uranium: {
+    name: "Uranium",
+    specialType: true,
+    symbol: "☢️",
+    atomicNumber: 92,
+    atomicRadius: 230,
+    electronegativity: 1.38,
+  },
+  flip: {
+    name: "FLIP",
+    specialType: true,
+    symbol: "🔄",
+    atomicNumber: "N/A",
+    atomicRadius: "N/A",
+    electronegativity: "N/A",
+  },
+};
+
 export const elements = [
   {
     name: "Hydrogen",
