@@ -222,8 +222,10 @@ const Game = () => {
         if (selectedMode === null || selectedMode === "") return;
       } while (!validModes.includes(selectedMode));
 
-      setMode(selectedMode);
+      currentPlayer.hand.splice(cardIndex, 1);
       currentPlayer.forfeitedTurn = false;
+
+      setMode(selectedMode);
 
       return;
     } else {
