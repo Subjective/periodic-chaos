@@ -110,8 +110,7 @@ const Game = () => {
 
     // set multiplier for monopoly cards
     let multiplier = 1;
-    if (players[currentPlayerIndex].monopolies.includes(element1))
-      multiplier = 1.5;
+    if (players[currentPlayerIndex].monopolies.has(element1)) multiplier = 1.5;
 
     return element1[mode] * multiplier - element2[mode];
   };
