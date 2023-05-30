@@ -22,15 +22,23 @@ const StartScreen = ({ startGame }) => {
         Welcome to Periodic Chaos!
       </h1>
       <form onSubmit={handleSubmit}>
-        <label>
-          Player Count:{" "}
-          <input
-            type="number"
-            value={playerCount}
-            onChange={handleInputChange}
-          />
-        </label>
-        <button type="submit">Start Game</button>
+        <div className="flex flex-col justify-center">
+          <label className="ml-5">
+            Player Count:{" "}
+            <input
+              type="number"
+              className="w-8 mb-6"
+              value={playerCount}
+              onChange={handleInputChange}
+            />
+          </label>
+          <button
+            className="bg-green-300 hover:bg-green-400 p-2 rounded-lg animate-bounce"
+            type="submit"
+          >
+            Start Game
+          </button>
+        </div>
       </form>
     </div>
   );
@@ -46,12 +54,12 @@ const Card = ({
   border,
 }) => {
   return (
-    <div className="w-64 h-64 m-4 inline-block cursor-pointer">
+    <div className="w-1/6 h-1/6 m-4 inline-block cursor-pointer">
       <Tilt tiltReverse={true}>
         <div
           onClick={onClick}
           className={clsx(
-            "w-64 h-64 hover:bg-gray-400 transition duration-500 bg-gray-300 p-2 rounded-lg flex flex-col justify-center",
+            "hover:bg-gray-400 transition duration-500 bg-gray-300 p-2 rounded-lg flex flex-col justify-center",
             border && "border-8 border-pink-400"
           )}
         >
@@ -287,9 +295,20 @@ const Game = () => {
           (player, index) =>
             index === currentPlayerIndex && (
               <div key={index}>
-                <h3>{player.name}</h3>
+                <div className="flex justify-center align-center my-2 mx-4">
+                  <h1 className="m-2 font-bold">{player.name}</h1>
+                  <h1 className="m-2">
+                    <strong>Mode:</strong> {mode}
+                  </h1>
+                  <button
+                    className="bg-red-500 hover:bg-red-600 rounded-lg p-1"
+                    onClick={forfeitTurn}
+                  >
+                    Forfeit turn
+                  </button>
+                </div>
+                <hr />
                 <Hand cards={player.hand} playCard={playCard} />
-                <button onClick={forfeitTurn}>Forfeit turn</button>
               </div>
             )
         )
@@ -300,10 +319,10 @@ const Game = () => {
         </div>
       )}
       <hr />
-      <h3>Stack</h3>
+      <div className="mt-4 flex justify-center align-center">
+        <h3 className="font-bold">Stack</h3>
+      </div>
       <Stack cards={stack} />
-      <div>Mode: {mode}</div>
-      <hr />
     </div>
   );
 };
