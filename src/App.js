@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { elements } from "./constants.js";
 
-// Define the Start Screen Component
 const StartScreen = ({ startGame }) => {
   const [playerCount, setPlayerCount] = useState(2);
 
@@ -33,7 +32,6 @@ const StartScreen = ({ startGame }) => {
   );
 };
 
-// Define the Card component
 const Card = ({
   onClick,
   symbol,
@@ -49,7 +47,6 @@ const Card = ({
   </div>
 );
 
-// Define the Hand component
 const Hand = ({ cards, playCard }) => (
   <div>
     {cards.map((card, index) => (
@@ -65,7 +62,6 @@ const Hand = ({ cards, playCard }) => (
   </div>
 );
 
-// Define the Stack component
 const Stack = ({ cards }) => (
   <div>
     {cards.map((card, index) => (
@@ -80,7 +76,6 @@ const Stack = ({ cards }) => (
   </div>
 );
 
-// Define the Game component
 const Game = () => {
   const [isGameStarted, setIsGameStarted] = useState(false);
   const [isGameEnded, setIsGameEnded] = useState(false);
@@ -107,8 +102,6 @@ const Game = () => {
   // Function to start the game
   const startGame = (playerCount) => {
     // Initialize the players' hands and deck of cards
-    // (You'll need to implement this part based on your desired deck composition and distribution logic)
-
     const startingDeck = [];
     const maxElements = 16;
     const repetitions = 3;
