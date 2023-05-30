@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import { elements, specialCards } from "./constants.js";
+import Tilt from "react-parallax-tilt";
+import { clsx } from "clsx";
 
 const StartScreen = ({ startGame }) => {
   const [playerCount, setPlayerCount] = useState(2);
@@ -15,11 +17,13 @@ const StartScreen = ({ startGame }) => {
   };
 
   return (
-    <div>
-      <h1>Welcome to Periodic Chaos!</h1>
+    <div className="flex flex-col justify-center m-auto items-center h-screen w-1/2">
+      <h1 className="text-center font-extrabold text-transparent text-8xl bg-clip-text bg-gradient-to-r from-purple-400 to-pink-600">
+        Welcome to Periodic Chaos!
+      </h1>
       <form onSubmit={handleSubmit}>
         <label>
-          Player Count:
+          Player Count:{" "}
           <input
             type="number"
             value={playerCount}
@@ -39,16 +43,31 @@ const Card = ({
   atomicNumber,
   atomicRadius,
   electronegativity,
-}) => (
-  <div onClick={onClick}>
-    <span>
-      {name}: ({symbol}) |{" "}
-    </span>
-    <span>Atomic Number: {atomicNumber}; </span>
-    <span>Atomic Radius: {atomicRadius} pm; </span>
-    <span>Electronegativity: {electronegativity}; </span>
-  </div>
-);
+  border,
+}) => {
+  return (
+    <div className="w-64 h-64 m-4 inline-block cursor-pointer">
+      <Tilt tiltReverse={true}>
+        <div
+          onClick={onClick}
+          className={clsx(
+            "w-64 h-64 hover:bg-gray-400 transition duration-500 bg-gray-300 p-2 rounded-lg flex flex-col justify-center",
+            border && "border-8 border-pink-400"
+          )}
+        >
+          <p>
+            <strong>
+              {name} ({symbol})
+            </strong>
+          </p>
+          <p>Atomic Number: {atomicNumber} </p>
+          <p>Atomic Radius: {atomicRadius} pm </p>
+          <p>Electronegativity: {electronegativity} </p>
+        </div>
+      </Tilt>
+    </div>
+  );
+};
 
 const Hand = ({ cards, playCard }) => (
   <div>
@@ -76,6 +95,7 @@ const Stack = ({ cards }) => (
         atomicNumber={card.atomicNumber}
         atomicRadius={card.atomicRadius}
         electronegativity={card.electronegativity}
+        border={index === cards.length - 1}
       />
     ))}
   </div>
@@ -210,9 +230,9 @@ const Game = () => {
       // Validate that the played card has a higher strength than the previous card on the stack
       const lastCard = stack[stack.length - 1];
       if (lastCard && compareStrength(cardToPlay, lastCard) < 0) {
-        alert(
-          "Invalid move! The card must have a higher strength than the previous card."
-        );
+        // alert(
+        //   "Invalid move! The card must have a higher strength than the previous card."
+        // );
         return;
       }
       // delete monopoly status if just played
