@@ -116,6 +116,7 @@ const Game = () => {
   const playCard = (cardIndex) => {
     const currentPlayer = players[currentPlayerIndex];
     const cardToPlay = currentPlayer.hand[cardIndex];
+    console.log("Current player hand length: ", currentPlayer.hand.length);
 
     if (cardToPlay.name === "FLIP") {
       let selectedMode;
@@ -127,11 +128,14 @@ const Game = () => {
         if (selectedMode === null || selectedMode === "") return;
       } while (!validModes.includes(selectedMode));
 
-      setPlayers((prevPlayers) => {
-        prevPlayers[currentPlayerIndex].forefeitedTurn = false;
-        prevPlayers[currentPlayerIndex].hand.splice(cardIndex, 1);
-        return prevPlayers;
-      });
+      currentPlayer.forfeitedTurn = false;
+      currentPlayer.hand.splice(cardIndex, 1);
+
+      if (currentPlayer.hand.length === 0) {
+        currentPlayer.isWinner = true;
+        setIsGameEnded(true);
+        return;
+      }
 
       setMode(selectedMode);
       // force component to rerender if resetting state to the same value
@@ -148,19 +152,13 @@ const Game = () => {
         return;
       }
       // delete monopoly status if just played
-      setPlayers((prevPlayers) => {
-        prevPlayers[currentPlayerIndex].monopolies.delete(cardToPlay.name);
-        return prevPlayers;
-      });
+      currentPlayer.monopolies.delete(cardToPlay.name);
       // Add the card to the stack
       setStack([...stack, cardToPlay]);
     }
 
-    setPlayers((prevPlayers) => {
-      prevPlayers[currentPlayerIndex].forefeitedTurn = false;
-      prevPlayers[currentPlayerIndex].hand.splice(cardIndex, 1);
-      return prevPlayers;
-    });
+    currentPlayer.forfeitedTurn = false;
+    currentPlayer.hand.splice(cardIndex, 1);
 
     if (currentPlayer.hand.length === 0) {
       currentPlayer.isWinner = true;
