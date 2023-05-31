@@ -119,58 +119,58 @@ const Game = () => {
     console.log("Current player hand length: ", currentPlayer.hand.length);
 
     if (cardToPlay.name === "FLIP") {
-      let selectedMode;
-      const validModes = ["atomicNumber", "atomicRadius", "electronegativity"];
-      do {
-        selectedMode = window.prompt(
-          'Enter "atomicNumber", "atomicRadius", or "electronegativity": '
-        );
-        if (selectedMode === null || selectedMode === "") return;
-      } while (!validModes.includes(selectedMode));
+      const selectedMode = promptForValidMode();
+      if (!selectedMode) return;
 
       currentPlayer.forfeitedTurn = false;
       currentPlayer.hand.splice(cardIndex, 1);
 
-      if (currentPlayer.hand.length === 0) {
-        currentPlayer.isWinner = true;
-        setIsGameEnded(true);
-        return;
-      }
+      handlePlayerHandEmpty(currentPlayer);
 
       setMode(selectedMode);
-      // force component to rerender if resetting state to the same value
       forceUpdate();
-
-      return;
     } else {
-      // Validate that the played card has a higher strength than the previous card on the stack
-      const lastCard = stack[stack.length - 1];
-      if (lastCard && compareStrength(cardToPlay, lastCard) < 0) {
-        // alert(
-        //   "Invalid move! The card must have a higher strength than the previous card."
-        // );
-        return;
-      }
-      // delete monopoly status if just played
+      if (!validateMove(cardToPlay)) return;
+
       currentPlayer.monopolies.delete(cardToPlay.name);
-      // Add the card to the stack
       setStack([...stack, cardToPlay]);
     }
 
     currentPlayer.forfeitedTurn = false;
     currentPlayer.hand.splice(cardIndex, 1);
 
-    if (currentPlayer.hand.length === 0) {
-      currentPlayer.isWinner = true;
-      setIsGameEnded(true);
-      return;
-    }
+    handlePlayerHandEmpty(currentPlayer);
 
-    // Update the current player
     setCurrentPlayerIndex((currentPlayerIndex + 1) % players.length);
 
     console.log("Play card!");
     console.log(players);
+  };
+
+  const promptForValidMode = () => {
+    const validModes = ["atomicNumber", "atomicRadius", "electronegativity"];
+    let selectedMode;
+    do {
+      selectedMode = window.prompt(
+        'Enter "atomicNumber", "atomicRadius", or "electronegativity": '
+      );
+    } while (!validModes.includes(selectedMode));
+    return selectedMode;
+  };
+
+  const validateMove = (cardToPlay) => {
+    const lastCard = stack[stack.length - 1];
+    if (lastCard && compareStrength(cardToPlay, lastCard) < 0) {
+      return false;
+    }
+    return true;
+  };
+
+  const handlePlayerHandEmpty = (currentPlayer) => {
+    if (currentPlayer.hand.length === 0) {
+      currentPlayer.isWinner = true;
+      setIsGameEnded(true);
+    }
   };
 
   const forfeitTurn = () => {
