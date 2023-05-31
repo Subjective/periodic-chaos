@@ -148,7 +148,10 @@ const Game = () => {
         return;
       }
       // delete monopoly status if just played
-      currentPlayer.monopolies.delete(cardToPlay.name);
+      setPlayers((prevPlayers) => {
+        prevPlayers[currentPlayerIndex].monopolies.delete(cardToPlay.name);
+        return prevPlayers;
+      });
       // Add the card to the stack
       setStack([...stack, cardToPlay]);
     }
