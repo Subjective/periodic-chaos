@@ -29,7 +29,7 @@ const StartScreen = ({ startGame }) => {
       <InstructionsModal isOpen={isModalOpen} onClose={closeModal} />
       <div className="flex flex-col justify-center m-auto items-center h-screen w-1/2">
         <h1 className="text-center font-extrabold text-transparent text-8xl bg-clip-text bg-gradient-to-r from-purple-400 to-pink-600">
-          Welcome to Periodic Chaos!
+          Periodic Chaos!
         </h1>
         <form onSubmit={handleSubmit}>
           <div className="flex flex-col justify-center">
