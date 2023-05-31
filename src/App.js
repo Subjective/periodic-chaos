@@ -178,19 +178,27 @@ const Game = () => {
     console.log("Forfeited turn");
     console.log(players);
 
-    const currentPlayer = players[currentPlayerIndex];
-    currentPlayer.forfeitedTurn = true;
+    const updatedPlayers = players.map((player, index) => {
+      if (index === currentPlayerIndex) {
+        return {
+          ...player,
+          forfeitedTurn: true,
+        };
+      }
+      return player;
+    });
 
     let forfeitedTurns = 0;
-    players.forEach((player) => {
+    updatedPlayers.forEach((player) => {
       if (player.forfeitedTurn) forfeitedTurns++;
     });
-    if (forfeitedTurns === players.length) {
+    if (forfeitedTurns === updatedPlayers.length) {
       setStack([]);
-      players.forEach((player) => (player.forfeitedTurn = false));
+      updatedPlayers.forEach((player) => (player.forfeitedTurn = false));
     }
 
-    setCurrentPlayerIndex((currentPlayerIndex + 1) % players.length);
+    setCurrentPlayerIndex((currentPlayerIndex + 1) % updatedPlayers.length);
+    setPlayers(updatedPlayers);
   };
 
   return !isGameStarted ? (
