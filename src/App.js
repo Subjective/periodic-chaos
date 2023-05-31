@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { elementalCards, specialCards } from "./lib/cards.js";
 import { StartScreen } from "./components/StartScreen.jsx";
 import { Hand, Stack } from "./components/Card.jsx";
-// import Modal from "Modal.jsx";
+import Modal from "./components/Modal.jsx";
 
 const Game = () => {
   const [isGameStarted, setIsGameStarted] = useState(false);
@@ -11,6 +11,27 @@ const Game = () => {
   const [stack, setStack] = useState([]);
   const [currentPlayerIndex, setCurrentPlayerIndex] = useState(0);
   const [mode, setMode] = useState("atomicNumber");
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const validModes = ["atomicNumber", "atomicRadius", "electronegativity"];
+
+  const openModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
+
+  const handleModeSelection = (mode) => {
+    setMode(mode);
+
+    closeModal();
+  };
+
+  const promptForValidMode = () => {
+    openModal();
+  };
 
   const compareStrength = (element1, element2) => {
     console.log(
@@ -118,15 +139,13 @@ const Game = () => {
     console.log("Current player hand length: ", currentPlayer.hand.length);
 
     if (cardToPlay.name === "FLIP") {
-      const selectedMode = promptForValidMode();
-      if (!selectedMode) return;
+      promptForValidMode();
 
       currentPlayer.forfeitedTurn = false;
       currentPlayer.hand.splice(cardIndex, 1);
 
       handlePlayerHandEmpty(currentPlayer, updatedPlayers);
 
-      setMode(selectedMode);
       setPlayers(updatedPlayers);
     } else {
       if (!validateMove(cardToPlay)) return;
@@ -145,17 +164,6 @@ const Game = () => {
 
     console.log("Play card!");
     console.log(updatedPlayers);
-  };
-
-  const promptForValidMode = () => {
-    const validModes = ["atomicNumber", "atomicRadius", "electronegativity"];
-    let selectedMode;
-    do {
-      selectedMode = window.prompt(
-        'Enter "atomicNumber", "atomicRadius", or "electronegativity": '
-      );
-    } while (!validModes.includes(selectedMode));
-    return selectedMode;
   };
 
   const validateMove = (cardToPlay) => {
@@ -205,6 +213,14 @@ const Game = () => {
     <StartScreen startGame={startGame} />
   ) : (
     <div>
+      <div>
+        <Modal
+          isOpen={isModalOpen}
+          onClose={closeModal}
+          options={validModes}
+          onSelect={handleModeSelection}
+        />
+      </div>
       {!isGameEnded ? (
         players.map(
           (player, index) =>
