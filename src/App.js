@@ -65,12 +65,21 @@ const Card = ({
         >
           <p>
             <strong>
-              {name} ({symbol})
+              <span className="hidden md:inline-block">
+                {name} ({symbol})
+              </span>
+              <span className="md:hidden flex justify-center">{symbol}</span>
             </strong>
           </p>
-          <p>Atomic Number: {atomicNumber} </p>
-          <p>Atomic Radius: {atomicRadius} pm </p>
-          <p>Electronegativity: {electronegativity} </p>
+          <p className="hidden md:inline-block">
+            Atomic Number: {atomicNumber}
+          </p>
+          <p className="hidden md:inline-block">
+            Atomic Radius: {atomicRadius} pm
+          </p>
+          <p className="hidden md:inline-block">
+            Electronegativity: {electronegativity}{" "}
+          </p>
         </div>
       </Tilt>
     </div>
