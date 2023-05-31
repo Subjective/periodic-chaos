@@ -314,7 +314,7 @@ const Game = () => {
           (player, index) =>
             index === currentPlayerIndex && (
               <div key={index}>
-                <div className="flex justify-center align-center my-2 mx-4">
+                <div className="flex justify-between align-center my-2 mx-4">
                   <h1 className="m-2 font-bold">{player.name}</h1>
                   <h1 className="m-2">
                     <strong>Mode:</strong> {mode}
