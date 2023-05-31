@@ -11,8 +11,6 @@ const Game = () => {
   const [stack, setStack] = useState([]);
   const [currentPlayerIndex, setCurrentPlayerIndex] = useState(0);
   const [mode, setMode] = useState("atomicNumber");
-  const [, updateState] = React.useState();
-  const forceUpdate = React.useCallback(() => updateState({}), []);
 
   const compareStrength = (element1, element2) => {
     console.log(
@@ -114,7 +112,8 @@ const Game = () => {
 
   // Function to handle a player's turn
   const playCard = (cardIndex) => {
-    const currentPlayer = players[currentPlayerIndex];
+    const updatedPlayers = [...players];
+    const currentPlayer = updatedPlayers[currentPlayerIndex];
     const cardToPlay = currentPlayer.hand[cardIndex];
     console.log("Current player hand length: ", currentPlayer.hand.length);
 
@@ -125,26 +124,27 @@ const Game = () => {
       currentPlayer.forfeitedTurn = false;
       currentPlayer.hand.splice(cardIndex, 1);
 
-      handlePlayerHandEmpty(currentPlayer);
+      handlePlayerHandEmpty(currentPlayer, updatedPlayers);
 
       setMode(selectedMode);
-      forceUpdate();
+      setPlayers(updatedPlayers);
     } else {
       if (!validateMove(cardToPlay)) return;
 
       currentPlayer.monopolies.delete(cardToPlay.name);
       setStack([...stack, cardToPlay]);
+
+      currentPlayer.forfeitedTurn = false;
+      currentPlayer.hand.splice(cardIndex, 1);
+
+      handlePlayerHandEmpty(currentPlayer, updatedPlayers);
+
+      setCurrentPlayerIndex((currentPlayerIndex + 1) % players.length);
+      setPlayers(updatedPlayers);
     }
 
-    currentPlayer.forfeitedTurn = false;
-    currentPlayer.hand.splice(cardIndex, 1);
-
-    handlePlayerHandEmpty(currentPlayer);
-
-    setCurrentPlayerIndex((currentPlayerIndex + 1) % players.length);
-
     console.log("Play card!");
-    console.log(players);
+    console.log(updatedPlayers);
   };
 
   const promptForValidMode = () => {
@@ -166,10 +166,11 @@ const Game = () => {
     return true;
   };
 
-  const handlePlayerHandEmpty = (currentPlayer) => {
+  const handlePlayerHandEmpty = (currentPlayer, updatedPlayers) => {
     if (currentPlayer.hand.length === 0) {
       currentPlayer.isWinner = true;
       setIsGameEnded(true);
+      setPlayers(updatedPlayers);
     }
   };
 
@@ -220,8 +221,17 @@ const Game = () => {
         )
       ) : (
         <div>
-          <p>Player {currentPlayerIndex + 1} is the Winner!</p>
-          <button onClick={startGame}>Restart</button>
+          {players.map((player, index) => {
+            if (player.isWinner) {
+              return (
+                <div key={index}>
+                  <p>Player {index + 1} is the Winner!</p>
+                  <button onClick={startGame}>Restart</button>
+                </div>
+              );
+            }
+            return null;
+          })}
         </div>
       )}
       <hr />
