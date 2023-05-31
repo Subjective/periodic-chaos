@@ -116,6 +116,8 @@ const Game = () => {
   const [stack, setStack] = useState([]);
   const [currentPlayerIndex, setCurrentPlayerIndex] = useState(0);
   const [mode, setMode] = useState("atomicNumber");
+  const [, updateState] = React.useState();
+  const forceUpdate = React.useCallback(() => updateState({}), []);
 
   const compareStrength = (element1, element2) => {
     console.log(
@@ -234,6 +236,8 @@ const Game = () => {
       currentPlayer.forfeitedTurn = false;
 
       setMode(selectedMode);
+      // force component to rerender if resetting state to the same value
+      forceUpdate();
 
       return;
     } else {
