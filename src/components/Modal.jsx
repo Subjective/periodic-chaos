@@ -20,7 +20,7 @@ const Modal = ({ isOpen, onClose, options, onSelect }) => {
                   className="text-blue-500 hover:underline"
                   onClick={() => handleOptionClick(option)}
                 >
-                  {option}
+                  {formatCamelCase(option)}
                 </button>
               </li>
             ))}

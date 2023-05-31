@@ -3,6 +3,7 @@ import { elementalCards, specialCards } from "./lib/cards.js";
 import { StartScreen } from "./components/StartScreen.jsx";
 import { Hand, Stack } from "./components/Card.jsx";
 import Modal from "./components/Modal.jsx";
+import { formatCamelCase } from "./lib/utils";
 
 const Game = () => {
   const [isGameStarted, setIsGameStarted] = useState(false);
@@ -229,7 +230,7 @@ const Game = () => {
                 <div className="flex justify-between align-center my-2 mx-4">
                   <h1 className="m-2 font-bold">{player.name}</h1>
                   <h1 className="m-2">
-                    <strong>Mode:</strong> {mode}
+                    <strong>Mode:</strong> {formatCamelCase(mode)}
                   </h1>
                   <button
                     className="bg-red-500 hover:bg-red-600 rounded-lg p-1"
