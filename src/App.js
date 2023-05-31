@@ -232,8 +232,11 @@ const Game = () => {
         if (selectedMode === null || selectedMode === "") return;
       } while (!validModes.includes(selectedMode));
 
-      currentPlayer.hand.splice(cardIndex, 1);
-      currentPlayer.forfeitedTurn = false;
+      setPlayers((prevPlayers) => {
+        prevPlayers[currentPlayerIndex].forefeitedTurn = false;
+        prevPlayers[currentPlayerIndex].hand.splice(cardIndex, 1);
+        return prevPlayers;
+      });
 
       setMode(selectedMode);
       // force component to rerender if resetting state to the same value
@@ -254,9 +257,12 @@ const Game = () => {
       // Add the card to the stack
       setStack([...stack, cardToPlay]);
     }
-    currentPlayer.forfeitedTurn = false;
 
-    currentPlayer.hand.splice(cardIndex, 1);
+    setPlayers((prevPlayers) => {
+      prevPlayers[currentPlayerIndex].forefeitedTurn = false;
+      prevPlayers[currentPlayerIndex].hand.splice(cardIndex, 1);
+      return prevPlayers;
+    });
 
     if (currentPlayer.hand.length === 0) {
       currentPlayer.isWinner = true;
