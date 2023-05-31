@@ -30,7 +30,7 @@ const InstructionsModal = ({ isOpen, onClose }) => {
           onClick={handleClick}
           className="fixed inset-0 bg-gray-900 opacity-50"
         ></div>
-        <div className="w-3/4 bg-white p-8 rounded-lg shadow-lg z-10">
+        <div className="overflow-y-auto w-3/4 h-3/4 bg-white p-8 rounded-lg shadow-lg z-10">
           <h2 className="text-2xl font-bold mb-4">Game Instructions</h2>
           <p className="mb-4">
             This is a card game with 54 cards (48 element cards, 4 FLIP cards,
