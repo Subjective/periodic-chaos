@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { elements, specialCards } from "./constants.js";
+import { elementalCards, specialCards } from "./cards.js";
 import Tilt from "react-parallax-tilt";
 import { clsx } from "clsx";
 
@@ -165,7 +165,7 @@ const Game = () => {
 
     // normal cards
     for (let i = 0; i < maxElements; i++) {
-      const element = elements[i % elements.length];
+      const element = elementalCards[i % elementalCards.length];
       for (let j = 0; j < repetitions; j++) {
         startingDeck.push(element);
       }

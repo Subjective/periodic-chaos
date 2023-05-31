@@ -17,7 +17,7 @@ export const specialCards = {
   },
 };
 
-export const elements = [
+export const elementalCards = [
   {
     name: "Hydrogen",
     symbol: "H",
